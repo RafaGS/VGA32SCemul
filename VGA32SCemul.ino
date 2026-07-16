@@ -1,7 +1,5 @@
 /*
  * Emulador SC-3000 para placas FabGL (TTGO VGA32 / Olimex FabGL)
- * Fase 0: esqueleto — Z80 + mapa de memoria/puertos real del
- * SC-3000, VDP y PSG en stub. Sin vídeo ni sonido todavía.
  *
  * Mantenido por RafaG
  * Basado en el port MSX/FabGL propio (VGA32SC3000emul) y en el
@@ -51,7 +49,7 @@ void setup() {
     setCpuFrequencyMhz(240);
     Serial.begin(115200);
     delay(1000);
-    Serial.println("\n\n=== SC-3000 Emulator - Fase 0 (esqueleto) ===");
+    Serial.println("\n\n=== VGA32SCemul [SC-3000 Emulator] ===");
 
     /* Gotcha conocido de FabGL: la generación de la señal VGA por
      * interrupciones puede acaparar el núcleo 0 e impedir que su
@@ -93,7 +91,7 @@ void setup() {
     Canvas->setBrushColor(Color::Black);
     Canvas->clear();
     Canvas->setPenColor(Color::White);
-    Canvas->drawText(10, 10, "SC-3000 Emulator - Fase 0");
+    Canvas->drawText(10, 10, "VGA32SCemul SC-3000 Emulator");
     Canvas->waitCompletion();
     Serial.println("Primer dibujo en pantalla OK");
 
@@ -180,15 +178,19 @@ void runFileBrowser() {
         if (redraw) {
             Canvas->setBrushColor(Color::Black);
             Canvas->clear();
-            Canvas->setPenColor(Color::Cyan);
-            Canvas->drawText(10, 10, "Selecciona cartucho (Arriba/Abajo/Enter):");
             Canvas->setPenColor(Color::BrightMagenta);
-            Canvas->drawLine(10, 25, 500, 25);
+            Canvas->drawLine(10, 1, 500, 1);       
+            Canvas->setPenColor(Color::BrightMagenta);       
+            Canvas->drawText(10, 10, "==== VGA32SCemul by RafaG - minibots.wordpress.com ====");
+             Canvas->setPenColor(Color::BrightMagenta);
+            Canvas->drawLine(10, 25, 500, 25);           
+            Canvas->setPenColor(Color::Cyan);
+            Canvas->drawText(10, 40, "Selecciona cartucho para SC-3000/H (Arriba/Abajo/Enter):");
 
             for (int i = 0; i < ITEMS_PER_PAGE; i++) {
                 int idx = topItem + i;
                 if (idx >= totalFiles) break;
-                int y = 35 + i * 14;
+                int y = 60 + i * 14;
                 Canvas->setPenColor(idx == selected ? Color::Yellow : Color::White);
                 if (idx == selected) Canvas->drawText(5, y, ">");
                 Canvas->drawText(20, y, files[idx].c_str());
